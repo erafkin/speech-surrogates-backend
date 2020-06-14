@@ -11,6 +11,8 @@ router.route('/login')
 	.get((req, res) => {
 		// ensure provided authorization headers
 		if (!req.headers.authorization) {
+            console.log("here2");
+            console.log(req.headers.authorization);
 			res.status(RESPONSE_CODES.UNAUTHORIZED.status).send({
 				status: RESPONSE_CODES.UNAUTHORIZED.status,
 				error: 'Must provide authorization header with basic auth (username and password)',
@@ -49,7 +51,7 @@ router.route('/login')
 router.route('/sign-up')
 	// CREATE new user
 	.post((req, res) => {
-		// ensure provided authorization headers
+        // ensure provided authorization headers
 		if (!req.headers.authorization) {
 			res.status(RESPONSE_CODES.UNAUTHORIZED.status).send({
 				status: RESPONSE_CODES.UNAUTHORIZED.status,
