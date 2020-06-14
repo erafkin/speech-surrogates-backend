@@ -34,7 +34,6 @@ const RESPONSE_CODES = {
 // adapted from: https://gist.github.com/charlesdaniel/1686663
 const extractCredentialsFromAuthorization = (authorization) => {
 	const auth = Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':');
-
 	return {
 		username: auth[0],
 		password: auth[1],

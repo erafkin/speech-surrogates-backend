@@ -9,6 +9,8 @@ const app = express();
 
 import requireAuth from './auth/require-auth'
 import userrouter from './routers/user-router';
+import authrouter from './routers/auth-router';
+
 
 require('dotenv').config(); // load environment variables
 
@@ -41,6 +43,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/api/users', userrouter);
+app.use('/api/auth', authrouter);
+
 // default index route
 app.get('/', (req, res) => {
     res.send('👋');

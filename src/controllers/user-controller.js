@@ -66,3 +66,39 @@ export const createUser = (user) => {
         });
     });
 };
+
+
+export const isAuthedUser = (credentials) => {
+	return new Promise((resolve, reject) => {
+		getUser(credentials.username)
+			.then((user) => {
+				if (user.password) {
+					bcrypt.compare(credentials.password, user.password, (err, result) => {
+						if (err) {
+							reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
+						} else {
+							// explicit check to only evaluate boolean
+							// (will false a null/undefined instead of returning null/undefined)
+							resolve(result === true);
+						}
+					});
+				} else {
+					reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: { message: 'Couldn\'t find SaltedPassword field' } });
+				}
+			})
+			.catch((error) => {
+				if (error.code.status === RESPONSE_CODES.NOT_FOUND.status) {
+					reject({ code: RESPONSE_CODES.UNAUTHORIZED, error: { message: 'Incorrect credentials' } });
+				} else {
+					reject(error);
+				}
+			});
+	});
+};
+// generate auth token for the given user
+export const tokenForUser = (username) => {
+	const timestamp = new Date().getTime();
+	return jwt.encode({ sub: username, iat: timestamp }, process.env.AUTH_SECRET);
+};
+
+
