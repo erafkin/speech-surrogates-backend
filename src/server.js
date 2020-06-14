@@ -7,7 +7,8 @@ const http = require('http');
 
 const app = express();
 
-import router from './router';
+import requireAuth from './auth/require-auth'
+import userrouter from './routers/user-router';
 
 require('dotenv').config(); // load environment variables
 
@@ -39,14 +40,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api', router);
+app.use('/api/users', userrouter);
 // default index route
 app.get('/', (req, res) => {
     res.send('👋');
   });
 // START THE SERVER
 // =============================================================================
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port);
 
 console.log(`listening on: ${port}`);
