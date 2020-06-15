@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as Blog from '../controllers/blog-controller';
-import requireAuth from '../authentication/require-auth';
+import requireAuth from '../auth/require-auth';
 import { RESPONSE_CODES } from '../constants';
 
 
@@ -22,7 +22,9 @@ router.route('/')
             });
         });
     })
-    .put(requireAuth, (req, res) => {
+    //create a new blog
+    .post( (req, res) => {
+        console.log(req.body);
         if (req.body.user.type === "admin") {
             //create a blog
             Blog.createBlog(req.body.blog)
@@ -57,6 +59,19 @@ router.route('/:id')
                 response: error.code.message,
             });
         });
-    });
+    })
+    .put((req, res) => {
+        Blog.updateBlog(req.params.id, req.body.blog)
+        .then((response) => {
+            res.send({ status: 200, error: null, response });
+        })
+        .catch((error) => {
+            res.status(error.code.status).send({
+                status: error.code.status,
+                error: error.error,
+                response: error.code.message,
+            });
+        });
+    })
 
 export default router;

@@ -52,20 +52,36 @@ export const createBlog = (blog) => {
     });
 }
 
-export const updateVisibility = (id, visibility) => {
-    return new Promise ((resolve, reject) => {
-        Blog.find({_id: id}).exec()
-        .then((blog) => {
-            blog[visible] = visibility;
-            blog.markModified('visible');
-            blog.save().then((result) => {
-                resolve(result)
-            });
-        }).catch((error) => {
-            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
-        })
-    });
-}
+export const updateBlog = (id, newBlog) => {
+	return new Promise((resolve, reject) => {
+		// ensure got required inputs
+		if (!(id)) {
+			reject({
+				code: RESPONSE_CODES.BAD_REQUEST,
+				error: { message: 'Please provide blog id' },
+			});
+		}
+		if (queryKeys.length > 0) {
+			// update blog
+			Blog.find({_id: id}).exec()
+            .then((blog) => {
+                blog[title] = newBlog.title;
+                blog.markModified('title');
+                blog[body] = newBlog.body;
+                blog.markModified('body');
+                blog[visible] = newBlog.visible;
+                blog.markModified('visible');
+                blog.save().then((result) => {
+                    resolve(result)
+                });
+            }).catch((error) => {
+                reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+            })
+		} else {
+			reject({ code: RESPONSE_CODES.NO_CONTENT, error: null });
+		}
+	});
+};
 
 
 

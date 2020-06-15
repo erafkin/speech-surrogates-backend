@@ -10,7 +10,7 @@ const app = express();
 import requireAuth from './auth/require-auth'
 import userrouter from './routers/user-router';
 import authrouter from './routers/auth-router';
-import blogrouter from './routers/auth-router';
+import blogrouter from './routers/blog-router';
 
 
 
@@ -46,7 +46,7 @@ app.use(bodyParser.json());
 
 app.use('/api/users', requireAuth, userrouter);
 app.use('/api/auth', authrouter);
-app.use('/api/auth', requireAuth, blogrouter);
+app.use('/api/blog', blogrouter);
 
 
 // default index route

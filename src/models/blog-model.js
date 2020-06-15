@@ -8,11 +8,11 @@ const BlogSchema = new Schema({
    visible: Boolean,
 }, {collection: "blogs"});
 
-UserSchema.set('toJSON', {
+BlogSchema.set('toJSON', {
   virtuals: true,
 });
 
-const Blog = mongoose.model('User', BlogSchema);
+const Blog = mongoose.model('Blog', BlogSchema);
 
 
 export default Blog;
