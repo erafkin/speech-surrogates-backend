@@ -10,6 +10,8 @@ const app = express();
 import requireAuth from './auth/require-auth'
 import userrouter from './routers/user-router';
 import authrouter from './routers/auth-router';
+import blogrouter from './routers/auth-router';
+
 
 
 require('dotenv').config(); // load environment variables
@@ -42,8 +44,10 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api/users', userrouter);
+app.use('/api/users', requireAuth, userrouter);
 app.use('/api/auth', authrouter);
+app.use('/api/auth', requireAuth, blogrouter);
+
 
 // default index route
 app.get('/', (req, res) => {
