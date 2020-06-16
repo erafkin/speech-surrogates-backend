@@ -13,7 +13,6 @@ router.route('/login')
 	.get((req, res) => {
 		// ensure provided authorization headers
 		if (!req.headers.authorization) {
-            console.log("here2");
             console.log(req.headers.authorization);
 			res.status(RESPONSE_CODES.UNAUTHORIZED.status).send({
 				status: RESPONSE_CODES.UNAUTHORIZED.status,

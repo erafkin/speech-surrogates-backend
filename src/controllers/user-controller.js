@@ -44,14 +44,15 @@ export const createUser = (user) => {
 
     return new Promise((resolve, reject)=>{
         if (!(user.username && user.password && user.first_name && user.last_name)) {
-			reject({
-				code: RESPONSE_CODES.BAD_REQUEST,
-				error: { message: 'Please provide first name, last name, username and password' },
-			});
+          reject({
+            code: RESPONSE_CODES.BAD_REQUEST,
+            error: { message: 'Please provide first name, last name, username and password' },
+          });
         }
         // auto-gen salt and hash the user's password
 		bcrypt.hash(user.password, SALT_ROUNDS, null, (err, hash) => {
 			if (err) {
+        console.log("unable to hash");
 				reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
 			} else {
                 User.create({
@@ -63,6 +64,8 @@ export const createUser = (user) => {
                 }).then((result) => {
                     resolve(result)
                 }).catch((error) => {
+                    console.log("error after creating");
+
                     reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
                 })
             }
