@@ -50,27 +50,31 @@ export const createUser = (user) => {
           });
         }
         // auto-gen salt and hash the user's password
-		bcrypt.hash(user.password, SALT_ROUNDS, null, (err, hash) => {
-			if (err) {
-        console.log("unable to hash");
-				reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
-			} else {
-                User.create({
-                    username: user.username,
-                    password: hash,
-                    last_name: user.last_name,
-                    first_name: user.first_name,
-                    type: "admin", //TODO: CHANGE THIS!
-                }).then((result) => {
-                    resolve(result)
-                }).catch((error) => {
-                    console.log("error after creating");
+        bcrypt.genSalt(SALT_ROUNDS, function(salt) {
 
-                    reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
-                })
-            }
-        });
+          bcrypt.hash(user.password, salt, null, (err, hash) => {
+            if (err) {
+              console.log("unable to hash");
+              reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
+            } else {
+                      User.create({
+                          username: user.username,
+                          password: hash,
+                          last_name: user.last_name,
+                          first_name: user.first_name,
+                          type: "admin", //TODO: CHANGE THIS!
+                      }).then((result) => {
+                          resolve(result)
+                      }).catch((error) => {
+                          console.log("error after creating");
+
+                          reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+                      })
+                  }
+              });
+            });
     });
+  
 };
 
 export const updateUser = (id, user) => {
