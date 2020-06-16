@@ -24,7 +24,7 @@ router.route('/')
     })
     //create a new blog
     .post( requireAuth, (req, res) => {
-        if (req.body.user.type === "admin") {
+        if (req.body.user.type === "admin"|| req.body.user.type === "contributer") {
             //create a blog
             Blog.createBlog(req.body.blog)
             .then((response) => {
@@ -60,7 +60,7 @@ router.route('/:id')
         });
     })
     .put(requireAuth, (req, res) => {
-        if (req.body.user.type === "admin") {
+        if (req.body.user.type === "admin" || req.body.user.type === "contributer") {
             Blog.updateBlog(req.params.id, req.body.blog)
             .then((response) => {
                 res.send({ status: 200, error: null, response });

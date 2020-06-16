@@ -1,6 +1,8 @@
 import express from 'express';
 import { isAuthedUser, tokenForUser, createUser } from '../controllers/user-controller';
 import { RESPONSE_CODES, extractCredentialsFromAuthorization } from '../constants';
+import requireAuth from '../auth/require-auth';
+
 
 //written by thomas monfre
 

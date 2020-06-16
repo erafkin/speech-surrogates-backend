@@ -44,7 +44,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api/users', requireAuth, userrouter);
+app.use('/api/users', userrouter);
 app.use('/api/auth', authrouter);
 app.use('/api/blog', blogrouter);
 
