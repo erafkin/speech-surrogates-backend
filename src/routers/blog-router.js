@@ -60,7 +60,7 @@ router.route('/:id')
         });
     })
     .put(requireAuth, (req, res) => {
-        if (req.body.user.type === "admin" || req.body.user.type === "contributer") {
+        if (req.body.user.type === "admin" || req.body.user.type === "contributor") {
             Blog.updateBlog(req.params.id, req.body.blog)
             .then((response) => {
                 res.send({ status: 200, error: null, response });
