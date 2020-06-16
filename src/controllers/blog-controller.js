@@ -68,7 +68,6 @@ export const updateBlog = (id, newBlog) => {
         }).catch((error) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })
-		
 	});
 };
 
