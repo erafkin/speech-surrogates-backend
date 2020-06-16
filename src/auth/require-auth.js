@@ -25,7 +25,5 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 });
 
 passport.use(jwtLogin);
-
 const requireAuth = passport.authenticate('jwt', { session: false });
-
 export default requireAuth;
