@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import * as Blog from '../controllers/blog-controller';
+import * as Keywords from '../controllers/keyword-controller';
+
 import requireAuth from '../auth/require-auth';
 import { RESPONSE_CODES } from '../constants';
 
@@ -23,7 +25,7 @@ router.route('/')
         });
     })
     //create a new blog
-    .post( requireAuth, (req, res) => {
+    .post(requireAuth, (req, res) => {
         if (req.body.user.type === "admin"|| req.body.user.type === "contributer") {
             //create a blog
             Blog.createBlog(req.body.blog)
@@ -44,6 +46,21 @@ router.route('/')
 				response: RESPONSE_CODES.FORBIDDEN.message,
 			});
 		}
+    });
+
+router.route('/keywords')
+    .get((req, res) => {
+        Keywords.getAllKeywords() 
+        .then((response) => {
+            res.send({ status: 200, error: null, response });
+        })
+        .catch((error) => {
+            res.status(error.code.status).send({
+                status: error.code.status,
+                error: error.error,
+                response: error.code.message,
+            });
+        });
     });
 router.route('/:id')
     .get((req, res) => {
@@ -73,6 +90,8 @@ router.route('/:id')
                 });
             });
         }
-    })
+    });
+
+
 
 export default router;

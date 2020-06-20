@@ -6,6 +6,7 @@ const BlogSchema = new Schema({
    title: String, 
    body: String,
    visible: Boolean,
+   keywords: Array, 
 }, {collection: "blogs"});
 
 BlogSchema.set('toJSON', {
