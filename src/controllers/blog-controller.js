@@ -74,14 +74,14 @@ export const updateBlog = (id, newBlog) => {
               if(result[0].visible !== newBlog.visible) {
                 if(newBlog.visible === false) {
                   Keywords.handleKeywordsArray("subtract", newBlog.keywords)
-                  .then((r)=>{resolve(res)}).catch((e)=> {reject(e)});
+                  .then((r)=>{resolve(newBlog)}).catch((e)=> {reject(e)});
                 } else {
                   Keywords.handleKeywordsArray("add", newBlog.keywords)
                   .then((r)=>{resolve(r)}).catch((e)=>{reject(e)});
                 }
               } else if (result[0].keywords.length !== newBlog.keywords.length){
                 Keywords.handleUpdateBlogKeywords(result[0].keywords, newBlog.keywords)
-                  .then((r)=>{resolve(res)}).catch((e)=> {reject(e)});
+                  .then((r)=>{resolve(newBlog)}).catch((e)=> {reject(e)});
               }
             })
             .catch((err)=> {reject(err)})
