@@ -111,3 +111,59 @@ export const handleKeywordsArray = (type, keywords) => {
     })
     
 };
+
+export const handleUpdateBlogKeywords = (old, newWords) => {
+    return new Promise ((resolve, reject)=> {
+        getAllKeywords()
+            .then((allKeywords) =>{
+                const promises = [];
+                newWords.forEach((k)=> {
+                    let exists = false;
+                    //see if the word exists in the db
+                    allKeywords.forEach((kw)=> {
+                        if(kw.name === k) {
+                            exists = true;
+                        }
+                    })
+
+                    //see if word was in old keywords
+                    let includes = false;
+                    old.forEach((kw)=> {
+                        if(kw === k) {
+                            includes = true;
+                        }
+                    })
+                    if(exists){
+                        //if they added an existing word, then increment
+                        if(!includes) {
+                            promises.push(incrementKeywordCount(k))
+
+                        } 
+                    } else {
+                        //if they added a new word, create it
+                        promises.push(createKeyword(k))
+
+                    }
+                })
+
+                //go thru all the old keywords and see if any were deleted
+                old.forEach((k)=> {
+                    let deleted = true;
+                    newWords.forEach((k2)=> {
+                        if(k === k2) {
+                            deleted = false;
+                        }
+                    })
+                    if(deleted){
+                        promises.push(decrementKeywordCount(k))
+
+                    }
+                })
+                Promise.all(promises).then((res)=>{ resolve(res)}).catch((err)=> reject(err))
+            })
+            .catch((err) => {
+                console.log(err);
+                reject(err);
+            })
+    })
+}
