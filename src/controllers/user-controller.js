@@ -62,7 +62,7 @@ export const createUser = (user) => {
                           password: hash,
                           last_name: user.last_name,
                           first_name: user.first_name,
-                          type: "admin", //TODO: CHANGE THIS!
+                          type: "none", 
                       }).then((result) => {
                           resolve(result)
                       }).catch((error) => {

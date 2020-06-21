@@ -46,6 +46,7 @@ export const createBlog = (blog) => {
             body: blog.body,
             visible: true,
             keywords: blog.keywords, 
+            comments: [],
         }).then((result) => {
           Keywords.handleKeywordsArray("add", blog.keywords)
           .then((res)=>{
@@ -82,6 +83,8 @@ export const updateBlog = (id, newBlog) => {
               } else if (result[0].keywords.length !== newBlog.keywords.length){
                 Keywords.handleUpdateBlogKeywords(result[0].keywords, newBlog.keywords)
                   .then((r)=>{resolve(newBlog)}).catch((e)=> {reject(e)});
+              } else {
+                resolve(newBlog);
               }
             })
             .catch((err)=> {reject(err)})
