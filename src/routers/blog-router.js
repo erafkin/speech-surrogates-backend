@@ -92,6 +92,20 @@ router.route('/:id')
         }
     });
 
+ router.route('/:id/comment')
+    .put((req, res) => {
+        Blog.updateBlog(req.body.id, req.body.blog)
+        .then((response) => {
+            res.send({ status: 200, error: null, response });
+        })
+        .catch((error) => {
+            res.status(error.code.status).send({
+                status: error.code.status,
+                error: error.error,
+                response: error.code.message,
+            });
+        });
+    });
 
 
 export default router;
