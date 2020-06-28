@@ -11,6 +11,8 @@ import requireAuth from './auth/require-auth'
 import userrouter from './routers/user-router';
 import authrouter from './routers/auth-router';
 import blogrouter from './routers/blog-router';
+import grantlanguagerouter from './routers/grant-language-router';
+
 
 
 
@@ -47,6 +49,8 @@ app.use(bodyParser.json());
 app.use('/api/users', userrouter);
 app.use('/api/auth', authrouter);
 app.use('/api/blog', blogrouter);
+app.use('/api/grant-languages', grantlanguagerouter);
+
 
 
 // default index route
