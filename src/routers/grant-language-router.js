@@ -23,9 +23,9 @@ router.route('/')
         });
     })
     //create a new grant language page
-    .post( requireAuth, (req, res) => {
+    .post(requireAuth, (req, res) => {
         if (req.body.user.type === "admin"|| req.body.user.type === "contributer") {
-            //create a blog
+            //create a language
             GrantLanguage.createGrantLanguage(req.body.grantLanguage)
             .then((response) => {
                 res.send({ status: 200, error: null, response });
