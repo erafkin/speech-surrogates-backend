@@ -2,8 +2,15 @@ import mongoose, { Schema } from 'mongoose';
 
 const GrantLanguageSchema = new Schema({
    name: String,
-   blurb: String,
-   multimedia: Array,
+   sections: [{
+    title: String,
+    blurb: String,
+    multimedia: [{
+      blurb: String,
+      link: String
+    }],
+   }]
+  
 }, {collection: "grant-languages"});
 
 GrantLanguageSchema.set('toJSON', {
