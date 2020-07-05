@@ -32,16 +32,15 @@ export const getGrantLanguage = (id) => {
 
 export const createGrantLanguage = (gl) => {
     return new Promise((resolve, reject)=>{
-        if (!(gl.name && gl.blurb )) {
+        if (!(gl.name && gl.sections )) {
           reject({
             code: RESPONSE_CODES.BAD_REQUEST,
-            error: { message: 'Please provide name and blurb' },
+            error: { message: 'Please provide name and sections' },
           });
         }
         GrantLanguage.create({
             name: gl.name,
-            blurb: gl.blurb,
-            multimedia: gl.multimedia === undefined ? [] : gl.multimedia
+            sections: gl.sections
         }).then((result) => {
             resolve(result);
         }).catch((error) => {
