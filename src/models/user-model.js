@@ -6,6 +6,7 @@ const UserSchema = new Schema({
     last_name: String,
     first_name: String,
     type: String,  //admin, contributer, none
+    bio: String,
 }, {collection: "users"});
 
 UserSchema.set('toJSON', {

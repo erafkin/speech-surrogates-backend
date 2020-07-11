@@ -63,6 +63,7 @@ export const createUser = (user) => {
                           last_name: user.last_name,
                           first_name: user.first_name,
                           type: "none", 
+                          bio: "",
                       }).then((result) => {
                           resolve(result)
                       }).catch((error) => {
@@ -86,7 +87,6 @@ export const updateUser = (id, user) => {
         });
       }
       console.log(user);
-      console.log("1");
       User.replaceOne( {_id: id}, user )
       .then((result) => {
           resolve(result);

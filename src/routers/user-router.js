@@ -19,10 +19,10 @@ router.route('/')
 				});
   })
 
-  router.route('/:id')
+  router.route('/:username')
 	// GET all users
 	.get((req, res) => {
-		User.getUser(req.params.id)
+		User.getUser(req.params.username)
 			.then((response) => {
 				res.send({ status: 200, error: null, response });
 			})
@@ -34,8 +34,8 @@ router.route('/')
 				});
 			})
 	})
-	.put(requireAuth, (req, res) => {
-		User.updateUser(req.params.id, req.body.user)
+	.put((req, res) => {
+		User.updateUser(req.params.username, req.body.user)
 			.then((response) => {
 				res.send({ status: 200, error: null, response });
 			})
