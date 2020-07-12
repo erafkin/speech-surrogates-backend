@@ -13,6 +13,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 	// make sure token matches a user in the database
 	getUser(payload.sub)
 		.then((user) => {
+			console.log(user);
 			if (user) {
 				return done(null, user);
 			} else {

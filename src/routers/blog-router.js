@@ -26,7 +26,7 @@ router.route('/')
     })
     //create a new blog
     .post(requireAuth, (req, res) => {
-        if (req.body.user.type === "admin"|| req.body.user.type === "contributer") {
+        if (req.body.user.type === "admin"|| req.body.user.type === "contributor") {
             //create a blog
             Blog.createBlog(req.body.blog)
             .then((response) => {
