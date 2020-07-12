@@ -5,7 +5,7 @@ const UserSchema = new Schema({
     password: String, 
     last_name: String,
     first_name: String,
-    type: String,  //admin, contributer, none
+    type: String,  //admin, contributor, none
     bio: String,
 }, {collection: "users"});
 

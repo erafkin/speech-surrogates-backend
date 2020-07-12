@@ -24,7 +24,7 @@ router.route('/')
     })
     //create a new grant language page
     .post(requireAuth, (req, res) => {
-        if (req.body.user.type === "admin"|| req.body.user.type === "contributer") {
+        if (req.body.user.type === "admin"|| req.body.user.type === "contributor") {
             //create a language
             GrantLanguage.createGrantLanguage(req.body.grantLanguage)
             .then((response) => {
