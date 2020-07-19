@@ -12,9 +12,7 @@ import userrouter from './routers/user-router';
 import authrouter from './routers/auth-router';
 import blogrouter from './routers/blog-router';
 import grantlanguagerouter from './routers/grant-language-router';
-
-
-
+import news from './routers/news-router';
 
 require('dotenv').config(); // load environment variables
 
@@ -50,8 +48,7 @@ app.use('/api/users', userrouter);
 app.use('/api/auth', authrouter);
 app.use('/api/blog', blogrouter);
 app.use('/api/grant-languages', grantlanguagerouter);
-
-
+app.use('/api/news', news);
 
 // default index route
 app.get('/', (req, res) => {

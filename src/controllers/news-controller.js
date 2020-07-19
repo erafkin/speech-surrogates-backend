@@ -1,6 +1,6 @@
 import News from '../models/news-model';
 
-export const getAllKeywords = () => {
+export const getAllNews = () => {
     return new Promise((resolve, reject) => {
         News.find()
         .then((b)=> {
@@ -36,13 +36,12 @@ export const createNews = (news) => {
 
 export const deleteNews = (news) => {
     return new Promise((resolve, result) => {
-        News.deleteOne(news).then((result)=> {
+        News.deleteOne({ _id: news }).then((result)=> {
             resolve(result)
         }).catch((error) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })
     })
-    
 }
 
 
