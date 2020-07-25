@@ -24,6 +24,7 @@ router.route('/')
     //create a new grant language page
     .post((req, res) => {
             //create a language
+            console.log("post map");
             console.log(req.body);
             MapLanguages.createMapLanguage(req.body.payload)
             .then((response) => {

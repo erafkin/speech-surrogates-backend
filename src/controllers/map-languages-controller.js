@@ -32,12 +32,12 @@ export const getMapLanguage = (id) => {
 
 export const createMapLanguage = (ml) => {
     return new Promise((resolve, reject)=>{
-        if (!(ml)) {
-          reject({
-            code: RESPONSE_CODES.BAD_REQUEST,
-            error: { message: 'Please provide a map language' },
-          });
-        }
+        // if (!(ml)) {
+        //   reject({
+        //     code: RESPONSE_CODES.BAD_REQUEST,
+        //     error: { message: 'Please provide a map language' },
+        //   });
+        // }
         console.log(ml);
         resolve({});
         // MapLanguage.create({
