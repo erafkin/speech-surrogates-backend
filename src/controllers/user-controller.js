@@ -87,12 +87,45 @@ export const updateUser = (id, user) => {
         });
       }
       console.log(user);
-      User.replaceOne( {_id: id}, user )
-      .then((result) => {
-          resolve(result);
-      }).catch((error) => {
-          reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+      User.find({_id: id})
+      .then((u) => {
+        if(u[0].password === user.password) {
+          User.replaceOne( {_id: id}, user )
+          .then((result) => {
+              resolve(result);
+          }).catch((error) => {
+              reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+          })
+        } else {
+          bcrypt.genSalt(SALT_ROUNDS, function(salt) {
+          bcrypt.hash(user.password, salt, null, (err, hash) => {
+            if (err) {
+              console.log("unable to hash");
+              reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
+            } else {
+                     
+              User.replaceOne( {_id: id}, {
+                username: user.username,
+                          password: hash,
+                          last_name: user.last_name,
+                          first_name: user.first_name,
+                          type: user.type, 
+                          bio:user.bio,
+               })
+              .then((result) => {
+                console.log("YEEE");
+                  resolve(result);
+              }).catch((error) => {
+                  reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+              })
+            }
+          });
+        });
+
+        }
+
       })
+
     });
 };
 export const isAuthedUser = (credentials) => {
