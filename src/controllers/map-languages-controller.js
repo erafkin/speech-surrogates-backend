@@ -38,7 +38,6 @@ export const createMapLanguage = (ml) => {
             error: { message: 'Please provide a map language' },
           });
         }
-        console.log(ml);
         MapLanguage.create({
             continent: ml.continent,
             country: ml.country,
@@ -62,7 +61,7 @@ export const createMapLanguage = (ml) => {
     });
 }
 
-export const updateMapLanguage = (id, newMapLanguage) => {
+export const updateMapLanguage = (id, ml) => {
 	return new Promise((resolve, reject) => {
 		// ensure got required inputs
 		if (!(id)) {
@@ -72,11 +71,11 @@ export const updateMapLanguage = (id, newMapLanguage) => {
 			});
         }
         // update map language
-        MapLanguage.replaceOne({_id: id}, newMapLanguage)
-            .then((res)=>{
-              resolve(newMapLanguage);
-            })
-            .catch((err)=> {reject(err)})
+        MapLanguage.replaceOne({_id: id}, ml)
+          .then((res)=>{
+            resolve(ml);
+          })
+          .catch((err)=> {reject(err)})
         }).catch((error) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })

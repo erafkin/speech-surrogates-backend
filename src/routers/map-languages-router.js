@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as MapLanguages from '../controllers/map-languages-controller';
 import requireAuth from '../auth/require-auth';
+import MapLanguage from '../models/map-languages-model';
 
 
 const router = Router();
@@ -22,25 +23,22 @@ router.route('/')
     })
     //create a new grant language page
     .post((req, res) => {
-            //create a language
-            console.log("post map");
-            console.log(req.body);
-            MapLanguages.createMapLanguage(req.body.map)
-            .then((response) => {
-                res.send({ status: 200, error: null, response });
-            })
-            .catch((error) => {
-                res.status(error.code.status).send({
-                    status: error.code.status,
-                    error: error.error,
-                    response: error.code.message,
-                });
-            })
+        MapLanguages.createMapLanguage(req.body.map)
+        .then((response) => {
+            res.send({ status: 200, error: null, response });
+        })
+        .catch((error) => {
+            res.status(error.code.status).send({
+                status: error.code.status,
+                error: error.error,
+                response: error.code.message,
+            });
+        })
     });
 
 router.route('/:id')
     .get((req, res) => {
-        News.getNews(req.params.id) 
+        MapLanguages.getMapLanguage(req.params.id) 
         .then((response) => {
             res.send({ status: 200, error: null, response });
         })
@@ -54,7 +52,7 @@ router.route('/:id')
     })
     .put(requireAuth, (req, res) => {
         if (req.body.user.type === "admin" || req.body.user.type === "contributor") {
-            Map.updateMapLanuage(req.params.id, req.body.language)
+            MapLanguages.updateMapLanguage(req.params.id, req.body.language)
             .then((response) => {
                 res.send({ status: 200, error: null, response });
             })
@@ -70,7 +68,7 @@ router.route('/:id')
     .delete(requireAuth, (req, res) => {
         //A little bit more risky. However with require auth you can only send request with jwt token and then only admins can 
         // send it from the site. seems unlikely people will care enough to hack this one part.
-        MapLanguage.deleteMapLanguage(req.params.id)
+        MapLanguages.deleteMapLanguage(req.params.id)
         .then((response) => {
             res.send({ status: 200, error: null, response });
         })
