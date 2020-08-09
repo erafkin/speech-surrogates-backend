@@ -53,7 +53,7 @@ app.use('/api/auth', authrouter);
 app.use('/api/blog', blogrouter);
 app.use('/api/grant-languages', grantlanguagerouter);
 app.use('/api/news', news);
-app.use('/api/map-languages', maplanguagerouter);
+app.use('/api/map', maplanguagerouter);
 
 
 // default index route
