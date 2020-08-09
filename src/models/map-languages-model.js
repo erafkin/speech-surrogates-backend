@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 const MapLanguageSchema = new Schema({
    continent: String,
-   country: String,
+   country: Array,
    language: String,
    instrument_family: String,
    instrument_type: String,
