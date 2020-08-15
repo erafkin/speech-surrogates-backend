@@ -44,6 +44,7 @@ router.route('/')
 					status: error.code.status,
 					error: error.error,
 					response: error.code.message,
+					message: "Old password submitted does not match the password saved"
 				});
 			});	
 		});		
