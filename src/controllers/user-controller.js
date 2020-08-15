@@ -4,6 +4,7 @@ import jwt from 'jwt-simple';
 import * as Mailer from '../services/mailer'
 import { RESPONSE_CODES } from '../constants';
 import { parseConnectionUrl } from 'nodemailer/lib/shared';
+require('dotenv').config(); // load environment variables
 const { SALT_ROUNDS } = process.env;
 
 
@@ -41,7 +42,6 @@ export const getAllUsers = () => {
 }
 
 export const createUser = (user) => {
-
     return new Promise((resolve, reject)=>{
         if (!(user.username && user.password && user.first_name && user.last_name)) {
           reject({
@@ -51,7 +51,6 @@ export const createUser = (user) => {
         }
         // auto-gen salt and hash the user's password
         bcrypt.genSalt(SALT_ROUNDS, function(salt) {
-
           bcrypt.hash(user.password, salt, null, (err, hash) => {
             if (err) {
               console.log("unable to hash");
@@ -170,37 +169,37 @@ export const resetPassword = (email, username) => {
       });
     }
     let pw = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    console.log("new pw:" + pw);
     // auto-gen salt and hash the user's password
-    bcrypt.hash(pw, SALT_ROUNDS, null, (err, hash) => {
-      if (err) {
-        console.log(err);
-        reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
-      } else {
-          User.findOne({username: username})
-          .then((u)=> {
-            console.log(u);
-            const user = {
-              username: u.username,
-              password: hash,
-              first_name: u.first_name,
-              last_name: u.last_name,
-              type: u.type,
-              _id: u._id,
-            }
-            User.replaceOne({_id: u._id}, user)
-            .then((result) => {
-              Mailer.resetPasswordEmail(email, pw);
-              resolve(user)
-            })
-            .catch((error) => {
+    bcrypt.genSalt(SALT_ROUNDS, function(err, salt) {
+        bcrypt.hash(pw, salt, null, (err, hash) => {
+          if (err) {
+            console.log(err);
+            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
+          } else {
+              User.findOne({username: username})
+              .then((u)=> {
+                const user = {
+                  username: u.username,
+                  password: hash,
+                  first_name: u.first_name,
+                  last_name: u.last_name,
+                  type: u.type,
+                  _id: u._id,
+                }
+                User.replaceOne({_id: u._id}, user)
+                .then((result) => {
+                  Mailer.resetPasswordEmail(email, pw);
+                  resolve(user)
+                })
+                .catch((error) => {
+                    reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+                })
+              })
+              .catch((error) => {
                 reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
             })
-          })
-          .catch((error) => {
-            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
-        })
-      }
+          }
+        });
     });
   });
 }
