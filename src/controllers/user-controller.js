@@ -13,6 +13,7 @@ export const getUser = (username) => {
     return new Promise((resolve, reject) => {
         User.findOne({"username": username})
         .then((u)=> {
+          console.log(u);
             if (u !== null) {
                 resolve(u);
               } else {
@@ -26,6 +27,7 @@ export const getUser = (username) => {
 }
 
 export const getAllUsers = () => {
+  console.log("getall users");
     return new Promise((resolve, reject) => {
         User.find()
         .then((u)=> {
@@ -90,7 +92,7 @@ export const updateUser = (id, user) => {
         if(u[0].password === user.password) {
           User.replaceOne( {_id: id}, user )
           .then((result) => {
-              resolve(result);
+              resolve(user);
           }).catch((error) => {
               reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
           })
@@ -107,7 +109,7 @@ export const updateUser = (id, user) => {
                     } else {
                             
                       User.replaceOne( {_id: id}, {
-                        username: user.username,
+                                  username: user.username,
                                   password: hash,
                                   last_name: user.last_name,
                                   first_name: user.first_name,
@@ -115,7 +117,14 @@ export const updateUser = (id, user) => {
                                   bio:user.bio,
                       })
                       .then((result) => {
-                          resolve(result);
+                          resolve({
+                            _id: id,
+                            username: user.username,
+                            password: hash,
+                            last_name: user.last_name,
+                            first_name: user.first_name,
+                            type: user.type, 
+                            bio:user.bio});
                       }).catch((error) => {
                           reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
                       })
