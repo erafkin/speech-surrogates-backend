@@ -81,7 +81,7 @@ export const updateMapLanguage = (id, ml) => {
         })
 };
 export const deleteMapLanguage = (ml) => {
-  return new Promise((resolve, result) => {
+  return new Promise((resolve, reject) => {
       MapLanguage.deleteOne({ _id: ml }).then((result)=> {
           resolve(result)
       }).catch((error) => {

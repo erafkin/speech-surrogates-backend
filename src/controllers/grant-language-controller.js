@@ -68,3 +68,13 @@ export const updateGrantLanguage = (id, newGrantLanauge) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })
 };
+
+export const deleteGrantLanguage = (id) => {
+  return new Promise((resolve, reject) => {
+      GrantLanguage.deleteOne({ _id: id }).then((result)=> {
+          resolve(result)
+      }).catch((error) => {
+          reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+      })
+  })
+}

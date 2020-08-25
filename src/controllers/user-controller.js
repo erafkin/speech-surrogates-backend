@@ -13,7 +13,6 @@ export const getUser = (username) => {
     return new Promise((resolve, reject) => {
         User.findOne({"username": username})
         .then((u)=> {
-          console.log(u);
             if (u !== null) {
                 resolve(u);
               } else {
