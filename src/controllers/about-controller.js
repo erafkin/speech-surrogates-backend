@@ -39,7 +39,6 @@ export const createAboutPage = (about) => {
 				error: { message: 'Please provide an About object' },
 			});
         }
-        console.log(about);
         About.create({
             title: about.title,
             blurb: about.blurb
