@@ -7,14 +7,13 @@ const http = require('http');
 
 const app = express();
 
-import requireAuth from './auth/require-auth'
 import userrouter from './routers/user-router';
 import authrouter from './routers/auth-router';
 import blogrouter from './routers/blog-router';
 import grantlanguagerouter from './routers/grant-language-router';
 import news from './routers/news-router';
 import maplanguagerouter from './routers/map-languages-router';
-
+import aboutrouter from './routers/about-router';
 
 require('dotenv').config(); // load environment variables
 
@@ -54,6 +53,7 @@ app.use('/api/blog', blogrouter);
 app.use('/api/grant-languages', grantlanguagerouter);
 app.use('/api/news', news);
 app.use('/api/map', maplanguagerouter);
+app.use('/api/about', aboutrouter);
 
 
 // default index route

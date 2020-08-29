@@ -26,7 +26,6 @@ export const getUser = (username) => {
 }
 
 export const getAllUsers = () => {
-  console.log("getall users");
     return new Promise((resolve, reject) => {
         User.find()
         .then((u)=> {
