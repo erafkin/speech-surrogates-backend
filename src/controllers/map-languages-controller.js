@@ -1,13 +1,18 @@
 import MapLanguage from '../models/map-languages-model';
 import MapParameter from '../models/map-parameter-model';
-import newMapEntry from '../../../speech-surrogates-frontend/src/components/new-map-entry';
+import RESPONSE_CODES from '../constants';
 
 export const getAllMapLanguages = () => {
     return new Promise((resolve, reject) => {
         MapLanguage.find()
         .then((b)=> {
             if (b !== null) {
-                resolve(b);
+              MapParameter.find()
+              .then((mps) => {
+                resolve({languages: b, parameters: mps});
+              }).catch((error) => {
+                reject(error);
+              });
               } else {
                 reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error });
               }
@@ -40,6 +45,7 @@ export const createMapLanguage = (ml) => {
             error: { message: 'Please provide a map language' },
           });
         }
+        console.log(ml);
         MapLanguage.create({
             continent: ml.continent,
             country: ml.country,
@@ -61,76 +67,134 @@ export const createMapLanguage = (ml) => {
             current_status: ml.currentStatus
         }).then((result) => {
             //Map Parameters: instrument family, instrument type, encoding medium, contrasts encoded, content, specialization
-            // multi select : Encoding mechanism, Contrasts encoded, Content, Specialization
+            // multi select : Encoding mechanism, Contrasts encoded, Content, Specialization, depth of encoding
+            console.log("map created");
             MapParameter.find().then((mps) => {
-              mps.forEach((mp) => {
-                switch (mp.parameter) {
-                  case "instrument_family":
-                    if (!mp.values.includes(ml.instrumentFamily)) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: mp.values.push(ml.instrumentFamily)})
+              var promises = [];
+              console.log(mps);
+              promises.push(
+                new Promise ((r1, r2) => {
+                  mps.forEach((mp) => {
+                    switch (mp.parameter) {
+                      case "instrument_family":
+                        if (!mp.values.includes(ml.instrumentFamily)) {
+                          console.log("got here");
+                          var newVals  = mp.values;
+                          console.log(newVals);
+                          newVals.push(ml.instrumentFamily);
+                          console.log(newVals)
+                          promises.push(new Promise((res, rej) => {
+                              MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newVals})
+                              .then((resu) => res(resu))
+                              .catch((e) => rej(e));
+                          }))
+                        }
+                        break;
+                      case "instrument_type":
+                        if (!mp.values.includes(ml.instrumentType)) {
+                          var newVals  = mp.values;
+                          console.log(newVals);
+                          newVals.push(ml.instrumentType);
+                          console.log(newVals)
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newVals})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))                    
+                        }
+                        break;
+                      case "encoding_medium":
+                        var newValues = mp.values;
+                        var addedValue = false;
+                        ml.encodingMedium.forEach((em) => {
+                          if (!mp.values.includes(em)){
+                            addedValue = true;
+                            newValues.push(em);
+                          }
+                        })
+                        if(addedValue) {
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))
+                        }
+                        break;
+                      case "contrasts_encoded":
+                        var newValues = mp.values;
+                        var addedValue = false;
+                        ml.contrastsEncoded.forEach((ce) => {
+                          if (!mp.values.includes(ce)){
+                            addedValue = true;
+                            newValues.push(ce);
+                          }
+                        })
+                        if(addedValue) {
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))
+                        }
+                        break;
+                      case "depth_of_encoding":
+                        var newValues = mp.values;
+                        var addedValue = false;
+                        ml.depthOfEncoding.forEach((doe) => {
+                          if (!mp.values.includes(doe)){
+                            addedValue = true;
+                            newValues.push(doe);
+                          }
+                        })
+                        if(addedValue) {
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))                   
+                         }
+                        break;
+                      case  "content":
+                        var newValues = mp.values;
+                        var addedValue = false;
+                        ml.content.forEach((c) => {
+                          if (!mp.values.includes(c)){
+                            addedValue = true;
+                            newValues.push(c);
+                          }
+                        })
+                        if(addedValue) {
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))                   
+                         }
+                        break;
+                      case "specialization":
+                        var newValues = mp.values;
+                        var addedValue = false;
+                        ml.specialization.forEach((s) => {
+                          if (!mp.values.includes(s)){
+                            addedValue = true;
+                            newValues.push(s);
+                          }
+                        })
+                        if(addedValue) {
+                          promises.push(new Promise((res, rej) => {
+                            MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
+                            .then((resu) => res(resu))
+                            .catch((e) => rej(e));
+                          }))                    
+                        }
+                        break;
                     }
-                    break;
-                  case "instrument_type":
-                    if (!mp.values.includes(ml.instrumentType)) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: mp.values.push(ml.instrumentType)})
-                    }
-                    break;
-                  case "encoding_medium":
-                    var newValues = mp.values;
-                    var addedValue = false;
-                    ml.encodingMedium.forEach((em) => {
-                      if (!mp.values.includes(em)){
-                        addedValue = true;
-                        newValues.push(em);
-                      }
-                    })
-                    if(addedValue) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
-                    }
-                    break;
-                  case "contrasts_encoded":
-                    var newValues = mp.values;
-                    var addedValue = false;
-                    ml.contrastsEncoded.forEach((ce) => {
-                      if (!mp.values.includes(ce)){
-                        addedValue = true;
-                        newValues.push(ce);
-                      }
-                    })
-                    if(addedValue) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
-                    }
-                    break;
-                  case  "content":
-                    var newValues = mp.values;
-                    var addedValue = false;
-                    ml.content.forEach((c) => {
-                      if (!mp.values.includes(c)){
-                        addedValue = true;
-                        newValues.push(c);
-                      }
-                    })
-                    if(addedValue) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
-                    }
-                    break;
-                  case "specialization":
-                    var newValues = mp.values;
-                    var addedValue = false;
-                    ml.specialization.forEach((s) => {
-                      if (!mp.values.includes(s)){
-                        addedValue = true;
-                        newValues.push(s);
-                      }
-                    })
-                    if(addedValue) {
-                      MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newValues})
-                    }
-                    break;
-                }
-              })
+                  })
+                  r1("done with loop");
+                })
+              );
+              Promise.all(promises).then((r) => {console.log("done");resolve(result)}).catch((er) => reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error }))
             })
-            resolve(result);
         }).catch((error) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })
@@ -165,3 +229,21 @@ export const deleteMapLanguage = (ml) => {
       })
   })
 }
+
+export const createParameter  = (parameter) => {
+  return new Promise((resolve, reject)=>{
+    if (!(parameter)) {
+    reject({
+      code: RESPONSE_CODES.BAD_REQUEST,
+      error: { message: 'Please the parameter' },
+    });
+   }
+    MapParameter.create({
+        parameter: parameter.parameter,
+        values: parameter.values,
+    }).then((result) => {
+        resolve(result)
+    }).catch((error) => {
+        reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+    })
+});}
