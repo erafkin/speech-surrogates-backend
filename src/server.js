@@ -1,10 +1,10 @@
+// Written by Emma Rafkin 2020
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 const http = require('http');
-
 const app = express();
 
 import userrouter from './routers/user-router';

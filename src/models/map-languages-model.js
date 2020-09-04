@@ -6,6 +6,7 @@ const MapLanguageSchema = new Schema({
    language: String,
    instrument_family: String,
    instrument_type: String,
+   encoding_medium: String,
    contrasts_encoded: String,
    depth_of_encoding: String,
    content: String, 
@@ -15,6 +16,8 @@ const MapLanguageSchema = new Schema({
    summary: String,
    source: String,
    mentions: String,
+   current_status: String,
+   entry_authors: String,
 }, {collection: "map-languages"});
 
 MapLanguageSchema.set('toJSON', {
