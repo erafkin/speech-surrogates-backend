@@ -45,11 +45,11 @@ export const createMapLanguage = (ml) => {
             error: { message: 'Please provide a map language' },
           });
         }
-        console.log(ml);
         MapLanguage.create({
             continent: ml.continent,
             country: ml.country,
             language: ml.name,
+            instrument_name: ml.instrumentName,
             instrument_family: ml.instrumentFamily,
             instrument_type: ml.instrumentType,
             contrasts_encoded: ml.contrastsEncoded,
@@ -68,21 +68,16 @@ export const createMapLanguage = (ml) => {
         }).then((result) => {
             //Map Parameters: instrument family, instrument type, encoding medium, contrasts encoded, content, specialization
             // multi select : Encoding mechanism, Contrasts encoded, Content, Specialization, depth of encoding
-            console.log("map created");
             MapParameter.find().then((mps) => {
               var promises = [];
-              console.log(mps);
               promises.push(
                 new Promise ((r1, r2) => {
                   mps.forEach((mp) => {
                     switch (mp.parameter) {
                       case "instrument_family":
                         if (!mp.values.includes(ml.instrumentFamily)) {
-                          console.log("got here");
                           var newVals  = mp.values;
-                          console.log(newVals);
                           newVals.push(ml.instrumentFamily);
-                          console.log(newVals)
                           promises.push(new Promise((res, rej) => {
                               MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newVals})
                               .then((resu) => res(resu))
@@ -93,9 +88,7 @@ export const createMapLanguage = (ml) => {
                       case "instrument_type":
                         if (!mp.values.includes(ml.instrumentType)) {
                           var newVals  = mp.values;
-                          console.log(newVals);
                           newVals.push(ml.instrumentType);
-                          console.log(newVals)
                           promises.push(new Promise((res, rej) => {
                             MapParameter.replaceOne({_id: mp._id}, {_id: mp._id, parameter: mp.parameter, values: newVals})
                             .then((resu) => res(resu))
@@ -193,7 +186,7 @@ export const createMapLanguage = (ml) => {
                   r1("done with loop");
                 })
               );
-              Promise.all(promises).then((r) => {console.log("done");resolve(result)}).catch((er) => reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error }))
+              Promise.all(promises).then((r) => {console.log("done"); resolve(result)}).catch((er) => reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error }))
             })
         }).catch((error) => {
             reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
