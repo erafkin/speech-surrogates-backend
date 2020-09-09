@@ -62,6 +62,20 @@ router.route('/keywords')
             });
         });
     });
+router.route('/recent')
+    .get((req, res) => {
+        Blog.getMostRecentBlogPost(req.params.id) 
+            .then((response) => {
+                res.send({ status: 200, error: null, response });
+            })
+            .catch((error) => {
+                res.status(error.code.status).send({
+                    status: error.code.status,
+                    error: error.error,
+                    response: error.code.message,
+                });
+            });
+    });
 router.route('/:id')
     .get((req, res) => {
         Blog.getBlog(req.params.id) 
@@ -106,6 +120,5 @@ router.route('/:id')
             });
         });
     });
-
 
 export default router;

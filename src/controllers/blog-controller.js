@@ -1,5 +1,7 @@
 import Blog from '../models/blog-model';
 import * as Keywords from './keyword-controller';
+var bson = require("bson");
+var BSON = new bson.BSON();
 
 export const getAllBlogs = () => {
     return new Promise((resolve, reject) => {
@@ -94,6 +96,22 @@ export const updateBlog = (id, newBlog) => {
         })
 	});
 };
+
+export const getMostRecentBlogPost = () => {
+  return new Promise((resolve, reject) => {
+    Blog.find({visible: true}).sort({$natural:-1}).limit(1)
+    .then((b)=> {
+        if (b !== null) {
+            resolve(b);
+          } else {
+            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error });
+          }
+        }).catch((error) => {
+          reject(error);
+        });
+    }) 
+   
+}
 
 
 
