@@ -1,6 +1,6 @@
 # Surrogate languages backend
 ## Stack
-This is a node/express server with a [mongoDb](https://www.mongodb.com/) database
+This is a [node/express](https://expressjs.com/) server with a [mongoDb](https://www.mongodb.com/) database
 
 ## Content
 This API has full CRUD capabilities for the following models:
@@ -52,6 +52,11 @@ This API has full CRUD capabilities for the following models:
 ## Deployment
 The backend is deployed on [heroku](https://www.heroku.com/) and can be found live [here](https://speech-surrogates-backend.herokuapp.com/).
 The frontend repo can be found [here](https://github.com/erafkin/speech-surrogates-frontend).
+
+## Run
+- clone this repo
+- yarn install
+- yarn start
 
 ## Author
 Emma Rafkin
