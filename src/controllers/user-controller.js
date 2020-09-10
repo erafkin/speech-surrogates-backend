@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jwt-simple';
 import * as Mailer from '../services/mailer'
 import { RESPONSE_CODES } from '../constants';
-import { parseConnectionUrl } from 'nodemailer/lib/shared';
 require('dotenv').config(); // load environment variables
 const { SALT_ROUNDS } = process.env;
 
@@ -43,10 +42,10 @@ export const getAllUsers = () => {
 
 export const createUser = (user) => {
     return new Promise((resolve, reject)=>{
-        if (!(user.username && user.password && user.first_name && user.last_name)) {
+        if (!(user.username && user.password && user.first_name && user.last_name && user.email)) {
           reject({
             code: RESPONSE_CODES.BAD_REQUEST,
-            error: { message: 'Please provide first name, last name, username and password' },
+            error: { message: 'Please provide first name, last name, email, username and password' },
           });
         }
         // auto-gen salt and hash the user's password
@@ -63,6 +62,7 @@ export const createUser = (user) => {
                           first_name: user.first_name,
                           type: "none", 
                           bio: "",
+                          email: user.email
                       }).then((result) => {
                           resolve(result)
                       }).catch((error) => {
@@ -113,6 +113,7 @@ export const updateUser = (id, user) => {
                                   first_name: user.first_name,
                                   type: user.type, 
                                   bio:user.bio,
+                                  email: user.email
                       })
                       .then((result) => {
                           resolve({
@@ -122,7 +123,9 @@ export const updateUser = (id, user) => {
                             last_name: user.last_name,
                             first_name: user.first_name,
                             type: user.type, 
-                            bio:user.bio});
+                            bio:user.bio,
+                            email: user.email
+                          });
                       }).catch((error) => {
                           reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
                       })
@@ -199,10 +202,11 @@ export const resetPassword = (email, username) => {
                   last_name: u.last_name,
                   type: u.type,
                   _id: u._id,
+                  email: u.email,
                 }
                 User.replaceOne({_id: u._id}, user)
                 .then((result) => {
-                  Mailer.resetPasswordEmail(email, pw);
+                  Mailer.resetPasswordEmail(email, pw, username);
                   resolve(user)
                 })
                 .catch((error) => {

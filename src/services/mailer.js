@@ -30,7 +30,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-export const resetPasswordEmail = (email, pw) => {
+export const resetPasswordEmail = (email, pw, username) => {
   
     async function main() {
       const accessToken = await oauth2Client.getAccessToken()
@@ -52,7 +52,7 @@ export const resetPasswordEmail = (email, pw) => {
         from: '<speechsurrogates@gmail.com>', // sender address
         to: email, // list of receivers
         subject: 'Reset Password', // Subject line
-        text: 'Your speech surrogates password was reset to: \n' + pw + '\nYou can now login with this password and reset your password from the profile panel', // plain text body
+        text: 'Your speech surrogates password for the account with the username: ' + username + ' \nwas reset to: \n' + pw + '\nYou can now login with this password and reset your password from the profile panel', // plain text body
       });
   
       console.log('Message sent: %s', info.messageId);
