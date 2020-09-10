@@ -43,36 +43,38 @@ export const getAllUsers = () => {
 export const createUser = (user) => {
     return new Promise((resolve, reject)=>{
         if (!(user.username && user.password && user.first_name && user.last_name && user.email)) {
-          reject({
+          resolve({
             code: RESPONSE_CODES.BAD_REQUEST,
             error: { message: 'Please provide first name, last name, email, username and password' },
           });
-        }
-        // auto-gen salt and hash the user's password
-        bcrypt.genSalt(SALT_ROUNDS, function(salt) {
-          bcrypt.hash(user.password, salt, null, (err, hash) => {
-            if (err) {
-              console.log("unable to hash");
-              reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
-            } else {
-                      User.create({
-                          username: user.username,
-                          password: hash,
-                          last_name: user.last_name,
-                          first_name: user.first_name,
-                          type: "none", 
-                          bio: "",
-                          email: user.email
-                      }).then((result) => {
-                          resolve(result)
-                      }).catch((error) => {
-                          console.log("error after creating");
+        } else {
+      // auto-gen salt and hash the user's password
+      bcrypt.genSalt(SALT_ROUNDS, function(salt) {
+        bcrypt.hash(user.password, salt, null, (err, hash) => {
+          if (err) {
+            console.log("unable to hash");
+            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: err });
+          } else {
+                    User.create({
+                        username: user.username,
+                        password: hash,
+                        last_name: user.last_name,
+                        first_name: user.first_name,
+                        type: "none", 
+                        bio: "",
+                        email: user.email
+                    }).then((result) => {
+                        resolve(result)
+                    }).catch((error) => {
+                        console.log("error after creating");
 
-                          reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
-                      })
-                  }
-              });
+                        reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+                    })
+                }
             });
+          });
+        }
+        
     });
   
 };
