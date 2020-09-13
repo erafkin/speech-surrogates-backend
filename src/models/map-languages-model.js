@@ -15,7 +15,7 @@ const MapLanguageSchema = new Schema({
    comprehension: String,
    productivity: String,
    summary: String,
-   source: String,
+   source: Array,
    mentions: String,
    current_status: String,
    entry_authors: String,
