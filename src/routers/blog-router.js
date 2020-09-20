@@ -64,7 +64,21 @@ router.route('/keywords')
     });
 router.route('/recent')
     .get((req, res) => {
-        Blog.getMostRecentBlogPost(req.params.id) 
+        Blog.getMostRecentBlogPost() 
+            .then((response) => {
+                res.send({ status: 200, error: null, response });
+            })
+            .catch((error) => {
+                res.status(error.code.status).send({
+                    status: error.code.status,
+                    error: error.error,
+                    response: error.code.message,
+                });
+            });
+    });
+router.route('/count')
+    .get((req, res) => {
+        Blog.getTotalBlogCount() 
             .then((response) => {
                 res.send({ status: 200, error: null, response });
             })

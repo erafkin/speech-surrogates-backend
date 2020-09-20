@@ -113,5 +113,17 @@ export const getMostRecentBlogPost = () => {
    
 }
 
+export const getTotalBlogCount = () => {
+  return new Promise ((resolve, reject)=>{
+    Blog.count()
+    .then((count)=>{
+      resolve(count);
+    })
+    .catch((error) =>{
+      reject(error);
+    })
+  })
+}
+
 
 
