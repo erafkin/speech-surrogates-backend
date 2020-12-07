@@ -1,4 +1,5 @@
 import About from '../models/about-model';
+import {RESPONSE_CODES} from '../constants'
 
 export const getAllAboutPages = () => {
     return new Promise((resolve, reject) => {
@@ -34,7 +35,7 @@ export const getAboutPage = (id) => {
 export const createAboutPage = (about) => {
     return new Promise((resolve, reject)=>{
         if (!(about)) {
-			reject({
+			resolve({
 				code: RESPONSE_CODES.BAD_REQUEST,
 				error: { message: 'Please provide an About object' },
 			});
@@ -45,7 +46,7 @@ export const createAboutPage = (about) => {
         }).then((result) => {
             resolve(result)
         }).catch((error) => {
-            reject({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
+            resolve({ code: RESPONSE_CODES.INTERNAL_ERROR, error: error });
         })
     });
 }

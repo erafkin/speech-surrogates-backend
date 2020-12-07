@@ -1,6 +1,6 @@
 import MapLanguage from '../models/map-languages-model';
 import MapParameter from '../models/map-parameter-model';
-import RESPONSE_CODES from '../constants';
+import {RESPONSE_CODES} from '../constants';
 
 export const getAllMapLanguages = () => {
     return new Promise((resolve, reject) => {

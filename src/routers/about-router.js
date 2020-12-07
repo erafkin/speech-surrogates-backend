@@ -30,7 +30,8 @@ router.route('/')
                 res.send({ status: 200, error: null, response });
             })
             .catch((error) => {
-                res.status(error.code.status).send({
+                console.log(error)
+                res.send({
                     status: error.code.status,
                     error: error.error,
                     response: error.code.message,
@@ -69,7 +70,7 @@ router.route('/:id')
                 res.status(error.code.status).send({
                     status: error.code.status,
                     error: error.error,
-                    response: error.code.message,
+                    response: error
                 });
             });
         }

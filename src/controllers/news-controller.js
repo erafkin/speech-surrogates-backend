@@ -1,4 +1,5 @@
 import News from '../models/news-model';
+import {RESPONSE_CODES} from '../constants'
 
 export const getAllNews = () => {
     return new Promise((resolve, reject) => {
