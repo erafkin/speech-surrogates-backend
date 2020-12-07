@@ -14,20 +14,6 @@ oauth2Client.setCredentials({
   refresh_token: process.env.GOOGLE_CLIENT_REFRESH_TOKEN
 });
 const accessToken = oauth2Client.getAccessToken()
-// create reusable transporter object using the default SMTP transport
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    type: 'OAuth2',
-    user: 'speechsurrogates@gmail.com',
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken: process.env.GOOGLE_CLIENT_REFRESH_TOKEN,
-    accessToken: accessToken
-  },
-});
 
 
 export const resetPasswordEmail = (email, pw, username) => {
@@ -57,6 +43,7 @@ export const resetPasswordEmail = (email, pw, username) => {
   
       console.log('Message sent: %s', info.messageId);
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      transporter.close();
     }
     main().catch(console.error);
   };
