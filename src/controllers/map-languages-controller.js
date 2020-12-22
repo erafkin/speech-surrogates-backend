@@ -63,10 +63,10 @@ export const createMapLanguage = (ml) => {
 			current_status: ml.currentStatus,
 			source: ml.source,
 			entry_authors: ml.entryAuthors,
-			iso_code: ml.iso_code,
+			iso_code: ml.isoCode,
 			macrofamily: ml.macrofamily,
 		}).then((result) => {
-			// Map Parameters: instrument family, instrument type, encoding medium, contrasts encoded, content, specialization
+			// Map Parameters: instrument family, instrument type, encoding medium, contrasts encoded, content, specialization, macrofamily
 			// multi select : Encoding mechanism, Contrasts encoded, Content, Specialization, depth of encoding
 			MapParameter.find().then((mps) => {
 				const promises = [];
@@ -77,25 +77,29 @@ export const createMapLanguage = (ml) => {
 							let addedValue;
 							switch (mp.parameter) {
 							case 'instrument_family':
-								if (!mp.values.includes(ml.instrumentFamily)) {
-									newValues = mp.values;
-									newValues.push(ml.instrumentFamily);
-									promises.push(new Promise((res, rej) => {
-										MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
-											.then((resu) => { return res(resu); })
-											.catch((e) => { return rej(e); });
-									}));
+								if (ml.instrumentFamily && ml.instrumentFamily !== '') {
+									if (!mp.values.includes(ml.instrumentFamily)) {
+										newValues = mp.values;
+										newValues.push(ml.instrumentFamily);
+										promises.push(new Promise((res, rej) => {
+											MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
+												.then((resu) => { return res(resu); })
+												.catch((e) => { return rej(e); });
+										}));
+									}
 								}
 								break;
 							case 'instrument_type':
-								if (!mp.values.includes(ml.instrumentType)) {
-									newValues = mp.values;
-									newValues.push(ml.instrumentType);
-									promises.push(new Promise((res, rej) => {
-										MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
-											.then((resu) => { return res(resu); })
-											.catch((e) => { return rej(e); });
-									}));
+								if (ml.instrumentType && ml.instrumentType !== '') {
+									if (!mp.values.includes(ml.instrumentType)) {
+										newValues = mp.values;
+										newValues.push(ml.instrumentType);
+										promises.push(new Promise((res, rej) => {
+											MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
+												.then((resu) => { return res(resu); })
+												.catch((e) => { return rej(e); });
+										}));
+									}
 								}
 								break;
 							case 'encoding_medium':
@@ -165,6 +169,7 @@ export const createMapLanguage = (ml) => {
 											.catch((e) => { return rej(e); });
 									}));
 								}
+
 								break;
 							case 'specialization':
 								newValues = mp.values;
@@ -184,14 +189,16 @@ export const createMapLanguage = (ml) => {
 								}
 								break;
 							case 'macrofamily':
-								if (!mp.values.includes(ml.macrofamily)) {
-									newValues = mp.values;
-									newValues.push(ml.macrofamily);
-									promises.push(new Promise((res, rej) => {
-										MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
-											.then((resu) => { return res(resu); })
-											.catch((e) => { return rej(e); });
-									}));
+								if (ml.macrofamily && ml.macrofamily !== '') {
+									if (!mp.values.includes(ml.macrofamily)) {
+										newValues = mp.values;
+										newValues.push(ml.macrofamily);
+										promises.push(new Promise((res, rej) => {
+											MapParameter.replaceOne({ _id: mp._id }, { _id: mp._id, parameter: mp.parameter, values: newValues })
+												.then((resu) => { return res(resu); })
+												.catch((e) => { return rej(e); });
+										}));
+									}
 								}
 								break;
 							default:
@@ -241,12 +248,13 @@ export const createParameter = (parameter) => {
 		if (!(parameter)) {
 			reject({
 				code: RESPONSE_CODES.BAD_REQUEST,
-				error: { message: 'Please the parameter' },
+				error: { message: 'you need to input a parameter' },
 			});
 		}
+		console.log(parameter);
 		MapParameter.create({
 			parameter: parameter.parameter,
-			values: parameter.values,
+			values: parameter.values || [],
 		}).then((result) => {
 			resolve(result);
 		}).catch((error) => {
