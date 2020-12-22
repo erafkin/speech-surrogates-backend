@@ -1,12 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 
 const AboutSchema = new Schema({
-    title: String,
-    blurb: String,
-}, {collection: "about"});
+	title: String,
+	blurb: String,
+}, { collection: 'about' });
 
 AboutSchema.set('toJSON', {
-  virtuals: true,
+	virtuals: true,
 });
 
 const About = mongoose.model('About', AboutSchema);

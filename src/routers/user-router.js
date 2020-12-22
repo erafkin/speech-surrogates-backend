@@ -1,25 +1,24 @@
 import { Router } from 'express';
-import * as User from '../controllers/user-controller'
-import requireAuth from '../auth/require-auth';
+import * as User from '../controllers/user-controller';
 
 const router = Router();
 router.route('/')
 	// GET all users
 	.get((req, res) => {
-    User.getAllUsers()
-				.then((response) => {
-					res.send({ status: 200, error: null, response });
-				})
-				.catch((error) => {
-					res.status(error.code.status).send({
-						status: error.code.status,
-						error: error.error,
-						response: error.code.message,
-					});
+		User.getAllUsers()
+			.then((response) => {
+				res.send({ status: 200, error: null, response });
+			})
+			.catch((error) => {
+				res.status(error.code.status).send({
+					status: error.code.status,
+					error: error.error,
+					response: error.code.message,
 				});
-  })
+			});
+	});
 
-  router.route('/:username')
+router.route('/:username')
 	// GET all users
 	.get((req, res) => {
 		User.getUser(req.params.username)
@@ -32,7 +31,7 @@ router.route('/')
 					error: error.error,
 					response: error.code.message,
 				});
-			})
+			});
 	})
 	.put((req, res) => {
 		User.updateUser(req.params.username, req.body.user)
@@ -44,13 +43,13 @@ router.route('/')
 					status: error.code.status,
 					error: error.error,
 					response: error.code.message,
-					message: "Old password submitted does not match the password saved"
+					message: 'Old password submitted does not match the password saved',
 				});
-			});	
-		});		
+			});
+	});
 
 router.route('/reset-password')
-	.post((req, res)=> {
+	.post((req, res) => {
 		console.log(req.body);
 		User.resetPassword(req.body.email, req.body.username)
 			.then((response) => {
@@ -62,8 +61,8 @@ router.route('/reset-password')
 					error: error.error,
 					response: error.code.message,
 				});
-			});	
-		});	
+			});
+	});
 
 
 export default router;

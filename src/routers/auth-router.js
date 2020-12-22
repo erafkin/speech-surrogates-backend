@@ -1,10 +1,8 @@
 import express from 'express';
 import { isAuthedUser, tokenForUser, createUser } from '../controllers/user-controller';
 import { RESPONSE_CODES, extractCredentialsFromAuthorization } from '../constants';
-import requireAuth from '../auth/require-auth';
 
-
-//written by thomas monfre
+// written by thomas monfre
 
 const router = express();
 
@@ -13,7 +11,7 @@ router.route('/login')
 	.get((req, res) => {
 		// ensure provided authorization headers
 		if (!req.headers.authorization) {
-            console.log(req.headers.authorization);
+			console.log(req.headers.authorization);
 			res.status(RESPONSE_CODES.UNAUTHORIZED.status).send({
 				status: RESPONSE_CODES.UNAUTHORIZED.status,
 				error: 'Must provide authorization header with basic auth (username and password)',
@@ -52,7 +50,7 @@ router.route('/login')
 router.route('/sign-up')
 	// CREATE new user
 	.post((req, res) => {
-        // ensure provided authorization headers
+		// ensure provided authorization headers
 		if (!req.headers.authorization) {
 			res.status(RESPONSE_CODES.UNAUTHORIZED.status).send({
 				status: RESPONSE_CODES.UNAUTHORIZED.status,
